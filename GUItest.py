@@ -33,7 +33,6 @@ while True:
     # Event was enter in stock symbol text box or submit
     if event == "-SYMBOL-":
         stock = values["-SYMBOL-"]
-        print(stock)
 
     # Event was submit button clicked or enter
     if event == "Submit":
@@ -41,7 +40,7 @@ while True:
         stockSymbols.append([stock])
 
         # Search of yahoo finance page of inputted stock and get raw HTML (Split into definition later)
-        URL = 'https://finance.yahoo.com/quote/' + stock + '?p=' + stock
+        URL = f'https://finance.yahoo.com/quote/{stock}?p={stock}'
         page = requests.get(URL)
 
         # Parse HTML
@@ -50,7 +49,8 @@ while True:
         stockPrices.append([results])
 
         # Wonky way to only add first in array, need to use for loop to update with entire list
-        line = f"{emptyStr.join(stockSymbols[0])} ${emptyStr.join(stockPrices[0])}"
+        lastIndex = len(stockSymbols) - 1
+        line = f"{emptyStr.join(stockSymbols[lastIndex])} ${emptyStr.join(stockPrices[lastIndex])}"
         window["-STOCKS LIST-"].update([line])
 
 window.close()
