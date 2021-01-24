@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from pip._vendor.distlib.compat import raw_input
-import PySimpleGUI as sg
-import os.path
 
 
 def getStockPrice(symbol):
