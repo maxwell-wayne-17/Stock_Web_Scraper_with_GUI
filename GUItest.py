@@ -59,19 +59,29 @@ while True:
 
     # Event was submit button clicked or enter
     if event == "Submit":
+        # Variable used to prevent displaying empty results
+        update = False
         # Add current text in box to array
         stockSymbols.append([stock])
 
         # Get stock price
         results = getStockPrice(stock)
-        stockPrices.append([results])
+        # Defensive coding against invalid symbols *Add error box
+        if results != emptyStr:
+            stockPrices.append([results])
+            update = True
+        else:
+            lastIndex = len(stockSymbols) - 1
+            del stockSymbols[lastIndex]
 
         # Add symbol and price to the display array
         lastIndex = len(stockSymbols) - 1
         line = f"{emptyStr.join(stockSymbols[lastIndex])} ${emptyStr.join(stockPrices[lastIndex])}"
-        displayLines.append(line)
+        if update:
+            displayLines.append(line)
 
         # Display the array
-        window["-STOCKS LIST-"].update(displayLines)
+        if update:
+            window["-STOCKS LIST-"].update(displayLines)
 
 window.close()
