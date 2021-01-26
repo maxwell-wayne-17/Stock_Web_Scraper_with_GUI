@@ -71,11 +71,13 @@ while True:
             stockPrices.append([results])
             update = True
         else:
-            lastIndex = len(stockSymbols) - 1
+            if len(stockSymbols) != 0:
+                lastIndex = len(stockSymbols) - 1
             del stockSymbols[lastIndex]
 
         # Add symbol and price to the display array
-        lastIndex = len(stockSymbols) - 1
+        if len(stockSymbols) != 0:
+            lastIndex = len(stockSymbols) - 1
         line = f"{emptyStr.join(stockSymbols[lastIndex])} ${emptyStr.join(stockPrices[lastIndex])}"
         if update:
             displayLines.append(line)
