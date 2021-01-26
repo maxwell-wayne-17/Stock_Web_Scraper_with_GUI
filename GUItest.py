@@ -2,13 +2,18 @@ import PySimpleGUI as sg
 import requests
 from bs4 import BeautifulSoup
 
+
 # Function to scrape yahoo finance and get stock price from a given symbol
 def getStockPrice(symbol):
     url = f'https://finance.yahoo.com/quote/{symbol}?p={symbol}'
     page = requests.get(url)
 
     soup = BeautifulSoup(page.content, 'html.parser')
-    price = soup.find(class_='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)').text
+
+    try:
+        price = soup.find(class_='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)').text
+    except AttributeError:
+        return -1
 
     return price
 
@@ -33,6 +38,15 @@ layout = [
 
     # Submit and cancel buttons
     [sg.Submit(), sg.Cancel()]
+]
+
+# Create error pop-up layout
+errorLayout = [
+    # Message in pop-up
+    [sg.Text('Invalid stock symbol.  Please try again.')],
+
+    # Close button
+    [sg.Button('Close')]
 ]
 
 # Open the labeled window with layout above
@@ -61,25 +75,22 @@ while True:
     if event == "Submit":
         # Variable used to prevent displaying empty results
         update = False
-        # Add current text in box to array
-        stockSymbols.append([stock])
 
         # Get stock price
         results = getStockPrice(stock)
         # Defensive coding against invalid symbols *Add error box
-        if results != emptyStr:
+        if results != emptyStr and results != -1:
             stockPrices.append([results])
+            stockSymbols.append([stock])
             update = True
         else:
-            if len(stockSymbols) != 0:
-                lastIndex = len(stockSymbols) - 1
-            del stockSymbols[lastIndex]
+            # Pop up box indicating invalid stock symbol
+            sg.popup_error('Invalid stock symbol.  Please try again')
 
         # Add symbol and price to the display array
-        if len(stockSymbols) != 0:
-            lastIndex = len(stockSymbols) - 1
-        line = f"{emptyStr.join(stockSymbols[lastIndex])} ${emptyStr.join(stockPrices[lastIndex])}"
         if update:
+            lastIndex = len(stockSymbols) - 1
+            line = f"{emptyStr.join(stockSymbols[lastIndex])} ${emptyStr.join(stockPrices[lastIndex])}"
             displayLines.append(line)
 
         # Display the array
