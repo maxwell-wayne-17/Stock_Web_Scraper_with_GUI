@@ -40,21 +40,12 @@ layout = [
     [sg.Submit(), sg.Cancel()]
 ]
 
-# Create error pop-up layout
-errorLayout = [
-    # Message in pop-up
-    [sg.Text('Invalid stock symbol.  Please try again.')],
-
-    # Close button
-    [sg.Button('Close')]
-]
-
 # Open the labeled window with layout above
 window = sg.Window('Yahoo Stock Scraper', layout)
 
 stockSymbols = []
 stockPrices = []
-# Array to hold stock symbol and prices
+# Array to hold stock symbol and prices to be displayed
 displayLines = []
 # Used to help format text
 emptyStr = ""
@@ -78,7 +69,7 @@ while True:
 
         # Get stock price
         results = getStockPrice(stock)
-        # Defensive coding against invalid symbols *Add error box
+        # Defensive coding against invalid symbols
         if results != emptyStr and results != -1:
             stockPrices.append([results])
             stockSymbols.append([stock])
