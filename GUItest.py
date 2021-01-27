@@ -69,7 +69,7 @@ while True:
 
     # Event was enter in stock symbol text box
     if event == "-SYMBOL-":
-        stock = values["-SYMBOL-"]
+        stock = values["-SYMBOL-"].upper()
 
     # Event was submit button clicked or enter
     if event == "Submit":
@@ -97,4 +97,5 @@ while True:
         if update:
             window["-STOCKS LIST-"].update(displayLines)
 
+        window["-SYMBOL-"].update(emptyStr)
 window.close()
